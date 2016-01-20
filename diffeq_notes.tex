@@ -1,0 +1,405 @@
+\documentclass{problemset}
+\usepackage{amsmath}
+
+\usepackage{lipsum}
+%\usepackage{showframe}
+\usepackage{layout}
+
+
+\usepackage[charter,cal=cmcal]{mathdesign} %different font
+\usepackage{microtype}
+\usepackage{amsmath}
+%\usepackage{amsfonts}
+%\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[inline]{enumitem}
+\usepackage{xparse}
+\usepackage{ifthen}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{kbordermatrix}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usepackage{calc}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\usetikzlibrary{automata,arrows,positioning,calc}
+%%%
+% Useful Linear Algebra macros
+%%%
+\newcommand{\ul}{$\underline{\phantom{xxx}}$}
+\newcommand{\ull}{\underline{\phantom{xxx}}}
+\newcommand{\xh}{{\hat {\mathbf x}}}
+\newcommand{\yh}{{\hat {\mathbf y}}}
+\newcommand{\zh}{{\hat {\mathbf z}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\proj}{\mathrm{proj}}
+\newcommand{\Proj}{\mathrm{proj}}
+\newcommand{\Perp}{\mathrm{perp}}
+\renewcommand{\span}{\mathrm{span}\,}
+\newcommand{\Span}{\mathrm{span}\,}
+\newcommand{\Img}{\mathrm{img}\,}
+\newcommand{\Null}{\mathrm{null}\,}
+\newcommand{\Range}{\mathrm{range}\,}
+\newcommand{\rref}{\mathrm{rref}}
+\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\Rank}{\mathrm{rank}}
+\newcommand{\nnul}{\mathrm{nullity}}
+\newcommand{\mat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\chr}{\mathrm{char}}
+\renewcommand{\d}{\mathrm{d}}
+\renewcommand{\P}{\mathbb{P}}
+
+\newcommand{\fatrule}[1]{\vspace{.3cm}\hrule {\hfill \sf #1}}
+
+%\tcbuselibrary{skins}
+%\usetikzlibrary{shadings}
+
+%\definecolor{defcolor}{rgb}{.05,.4,.15}
+%\colorlet{defframecolor}{green!50!black}
+\declareoutlinedbox{lemma}{LEMMA}{LEM}{defframecolor}{defcolor}
+\newenvironment{proof}{\emph{Proof.}}{\hfill$\square$}
+%%%
+% Set up the margins to use a fairly large area of the page
+%%%
+\textwidth=6in
+\topmargin=-1in
+\textheight=10in
+\parskip=.07in
+\parindent=0in
+
+\begin{document}
+%\pagestyle{empty}
+\pagestyle{fancy}
+\rfoot{\footnotesize\it \copyright\,Jason Siefken, 2016 \ \makebox(30,5){\includegraphics[height=1.2em]{by-sa.pdf}}}
+\renewcommand{\headrulewidth}{0pt}
+
+\begin{center}
+	{\huge\bf Differential Equations \\{\sc Math 281-2}}\\
+
+\vspace{.7in}
+{
+\it \copyright\,Jason Siefken, 2016 \\
+Creative Commons By-Attribution Share-Alike\, \makebox(30,5){\includegraphics[height=1.2em]{by-sa.pdf}}
+}
+\end{center}
+
+\section*{What is a Differential Equation?}
+
+
+	A function $f:\R^n\to \R$ is a relationship between numbers.
+	For example, if $f(x,y)=x^2-y^2$, the equation $f(x,y)=k$ has solutions which are pairs of numbers 
+	$(x_0,y_0)$ satisfying $x_0^2-y_0^2=k$.
+
+	Relationships between numbers are great, but we're graduating
+	to relationships between functions.  Consider
+	\[
+		\frac{\d}{\d x}:\{\text{functions}\}\to\{\text{functions}\}.
+	\]
+	We might then consider $D(f) = \frac{\d f}{\d x}$ and ask for the set of solutions
+	to
+	\[
+		D(f) = 0.
+	\]
+	From calculus you know that the only functions with zero derivative everywhere
+	are constant functions.  Thus, $D(f)=0$ has solutions $f(x)=k$ for constant $k$.
+
+	What about $D(f)=f$?  This equation has solutions $f(x)=0$ and $f(x)=ke^x$ for any
+	constant $k$.
+
+	Equation where the solutions are functions are called \emph{functional equations}.
+
+	\begin{definition}[Differential Equation]
+		A functional equation that involves derivatives is called
+		a \emph{differential equation}.  An differential equation
+		is called \emph{ordinary} if it is a differential equation
+		without partial derivatives.
+	\end{definition}
+
+	We sometimes abbreviate \emph{ordinary differential equation} as ODE.
+
+	In this class, we'll only deal with ordinary differential equations.
+
+	Why is this idea useful?  Derivatives capture rates of change,
+	and rates of change seem to relate to all sorts of quantities in nature. So, in a word,
+	\emph{modeling}.
+
+	\subsection*{Examples of Differential Equations}
+	\begin{enumerate}
+		\item From physics, if you're in a uniform gravitational field, the change
+			in your velocity is constant with respect to time.  That is,
+			\[
+				\frac{\d v}{\d t} = a.
+			\]
+			You've discovered acceleration!
+		\item Newton's law of cooling states that if $T(t)$ is the temperature
+			of a body at time $T$ and $W$ is the ambient temperature, then
+			\[
+				\frac{ \d T}{\d t} = \alpha(T-W)
+			\]
+			for some $\alpha$.
+		\item Imagine you're hungry.  Let $A(t)$ be your appetite at time $t$, and let
+			$F(t)$ be how much food you've eaten.  You might imagine
+			\[
+				F'(t) = \alpha A(t). \qquad\qquad\text{(What would this mean?)}
+			\]
+			Now, if $T$ is the capacity of your tummy, you might also imagine
+			\[
+				A'(t) =\frac{-\beta}{T-F(t)}.\qquad\qquad\text{(Is this reasonable?)}
+			\]
+			This is a \emph{system} of differential equations.
+
+			You might also suspect that it takes time for your appetite to change
+			after you've eaten food.  We could model this with the equation
+			\[
+				A'(t) =\frac{-\beta}{T-F(t-k)}
+			\]
+			for some time delay $k$.
+	\end{enumerate}
+
+	You can dream up differential equations to model just about any situation.
+	However, there is a cruel fact of life: \emph{almost all differential equations
+	do not have elementary closed-form solutions}.  That is, almost
+	every differential equation you dream up, you won't be able to write down
+	a formula for its solution.
+
+	Because of this, we will largely focus on modeling and estimating behavior of solutions
+	and what we can do with solutions, rather than how to solve particular differential
+	equations.
+
+	\section*{Terminology}
+
+	A differential equation (or system) is called $n$th order if $\frac{\d^n}{\d x^n}$ is the highest
+	order derivative that appears.
+
+	A differential equation is called \emph{linear} if it can be written in the form
+	\[
+		h_n(t)\frac{\d^n f(t)}{\d t^n} + h_{n-1}(t)\frac{\d^{n-1} f(t)}{\d t^{n-1}}
+		+\cdots +h_1(t)\frac{\d f(t)}{\d t} + h_0(t) f(t) + h(t) = 0
+	\]
+	for some function $h_n,\ldots, h_1,h_0,h$ that depend only on $t$.  (It will turn out
+	that linear differential equations with constant coefficients is one of the few types of
+	differential equations we know how to solve.)  If $h(t)=0$ for some linear
+	differential equation, it is called \emph{homogeneous}.
+
+	\subsection*{Visualizing first order ODE's}
+
+	Suppose we rewrite a first order ODE as
+	\[
+		f'(t) = F(t,f(t)).
+	\]
+	We can visualize this differential equation with a \emph{slope field}.  Letting $y=f(t)$,
+	we can plot in the $ty$-plane little line segments representing the slope at each point.
+
+	Let's visualize $f'(t) = f(t) + t$.
+
+	\begin{center}
+	{
+	\def\length{sqrt(1+(x+y)^2)}
+	\begin{tikzpicture}
+	\begin{axis}[domain=-3:3, view={0}{90}, title={$\dfrac{\mathrm{d}f(t)}{\mathrm{d}t}=f(t)+t$}]
+		\addplot3[blue, quiver={u={1/(\length)}, v={(x+y)/(\length)}, scale arrows=0.45}, -stealth,samples=12] {0};
+		\draw (-3,0) -- (3,0);
+		\draw (0,-3) -- (0,3);
+	\end{axis}
+	\end{tikzpicture}
+	}
+	\end{center}
+
+	Looking at the slope field, we could imagine curves whose slope follows the pattern of the field
+	a curve that \emph{flows} along the slope field).
+
+	If we specify \emph{initial conditions}, like $f(-1)=0$, we've specified
+	that $(-1,0)$ lies on our solution curve in the $ty$-plane.  From the picture, it looks like
+	$f(t) = -t-1$ is the corresponding solutions, and checking, indeed this is a solution for
+	the given initial conditions!
+
+	Specifying different initial conditions, like $f(0)=0$, we expect to see a totally different solution curve.
+	The solution for these initial conditions is $f(t)=e^{t-1}-t-1$.
+
+	We can see from the slope field that depending on the initial condition, there are several different
+	``looks'' a solution may have.  The line $y=-t-1$ seems to divide the set of initial
+	conditions into solutions that curve up and those that curve down.
+
+	Can we see this from the equation?
+
+	\begin{quote}
+		Consider the two cases, one where our initial conditions start above $f(t)=-t-1$
+		and the other where they start below.
+
+		$f < -t -1$.  In this case, $f+t<1$.  From the differential equation $f'=f+t$, we can see that that the slope
+		starts out negative.  In particular $f'=\alpha <-1$.  If we increase $t$ by a small amount, $f$ will decrease 
+		by approximately $\alpha \Delta t$.  Thus, our new slope will be $f_{\text{new}}'
+		\approx f+t+\alpha \Delta t+\Delta t = f+t+(1+\alpha)\Delta t< -1$ since $1+\alpha < 0$.  Not only that, 
+		$f_{\text{new}}' < f'$.  So, given these initial conditions, we'd expect the solution to head towards
+		negative $y$ values at a faster and faster rate.
+
+		$f > -t-1$.  In this case, we get the opposite of what we got before.  As $t$ increases, $f'=f+t$
+		increases, and so we expect solutions whose slope increases as $t$ increases.  Further, after 
+		at most $1$ unit of increase in $t$, we expect $f'>0$.
+	\end{quote}
+
+	In the example $f' =f+t$, there was a solution for every initial condition.  Recall that a
+	solution is a \emph{function} that satisfies the differential equation and the initial conditions.
+	Sometimes we can see patterns in the slope field that are not functions.
+
+	For each of the following, draw the slope field and estimate what regions of initial conditions
+	correspond to functions, and how many different ``looks'' can solutions have.
+	\begin{enumerate}
+		\item $y'=x/y$
+		\item $y'=y/x$
+		\item $y'=e^x$
+		\item $y'=y(2-y)$
+		\item $y'=3x^2-4$
+		\item $y'=x\sqrt{y}$
+		\item $y'=y^2-x$
+		\item $y'=x^2-y^2$
+	\end{enumerate}
+
+	\section*{Euler's Method}
+
+	Euler's methods is the name of a numerical algorithm to approximate the solution to
+	initial value problems.  The logic follows from the idea of a linear approximation.
+	If we have $y=f(x)$ and we know $y'$, we can approximate $f(x+\Delta x) \approx y+\Delta x y'=y_1$.
+	Now, if we have an equation that relates $y'$ to $x$ and $y$, we can use $y_1$ to approximate
+	$y_1'$, the slope of $f$ at $x+\Delta x$.  Once we have that data, we repeat.  If our initial 
+	step size was small enough, we would expect to get a reasonable numerical approximation.
+
+	\begin{definition}[Euler's Method]
+		Let $y'(x)=f(x,y)$ be a first order ordinary differential equation.  The \emph{Euler approximation}
+		to the initial value problem $y'=f(x,y)$ and $(x, y(x))=(x_0,y_0)$ with step size $\Delta x$ is
+		the sequence of points $(x_i,y_i)$ given by $(x_0,y_0)$ if $i=0$ and 
+		\[
+			x_i = x_{i-1}+\Delta x
+		\]
+		\[
+			y_i = y_{i-1} + f(x_{i-1}, y_{i-1}).
+		\]
+		The inductive algorithm to generate $(x_i,y_i)$ is called \emph{Euler's Method}.
+	\end{definition}
+
+	Euler's method is rather straightforward, but how do we know it actually approximates 
+	solutions to the differential equation?
+
+	\begin{definition}[Convergent Approximation]
+		Let $\{(x_i,y_i)_{\Delta x}\}$ be the output of some algorithm $\mathcal A(\Delta x)$ for the initial
+		value problem $y'=f(x,y)$ with initial conditions $(x,y)=(x_0,y_0)$.  We say $\mathcal A(\Delta x)$
+		\emph{converges} to the solution to the initial value problem if
+		\[
+			\max_{(x_i,y_i)_{\Delta x}} | y_i - y(x_i)| \to 0\qquad \text{as}\qquad \Delta x\to 0
+		\]
+		where $y$ the true solution to the initial value problem.
+	\end{definition}
+
+	Euler's method is an algorithm with a tunable parameter, $\Delta x$, the step size.
+	Saying that Euler's method converges just amounts to saying that the error
+	in the estimated solution goes to zero as the step size goes to zero.
+
+	It'd be swell if Euler's method converged.  And, in fact, it does, but not 
+	necessarily all the time.
+
+	\begin{theorem}
+		Consider the initial value problem $y'=f(x,y)$ with initial conditions
+		$(x_0,y_0)$.  Further suppose $\|\nabla f(x,y)\| \leq M$ for $(x,y)\in [x_0,x_0+T]\times\R$.
+		Then Euler's method converges on the interval $[x_0,x_0+T]$.
+	\end{theorem}
+
+	\begin{proof}
+		Let $y^*$ be the true solution to the initial value problem.  We must show that
+		the Euler approximates $(x_i,y_i)$ have bounded total distance from $(x_i, y^*(x_i))$.
+		
+		To do this, we will consider two types of error.  Let $d_i$ be the \emph{local error}
+		for $(x_i,y_i)$ and let $e_i$ be the \emph{total error} at $(x_i,y_i)$.  That is,
+		let $y^*_i$ be the solution to the initial value problem $y'=f(x,y)$ with initial conditions
+		$(x_i,y_i)$.  Then,
+		\[
+			d_i = \underbrace{y_{i-1}^*(x_{i-1}+\Delta x)}_{\text{how much
+			we should have changed by}}-\qquad \underbrace{(y_{i-1} + f(x_{i-1},y_{i-1})\Delta x)}_{\text{next step}},
+		\]
+		and 
+		\[
+			e_i = \underbrace{y_i}_{\text{approximation}} -\quad \underbrace{y^*(x_i)}_{\text{exact value}}.
+		\]
+
+		If we can show $|e_i|\to 0$, we'd be done!  We will do this by bounding the local errors, $d_i$,
+		and then showing that if they are small enough, $e_i$ will also be small.
+
+		To bound $d_i$, let's use our knowledge of linear approximations.  Since $y_{i-1}^*$ is
+		a solution to an initial value problem, it is differentiable.  Further, since $\nabla f$
+		exists, $y_{i-1}^*$ is actually twice differentiable.  In any case,
+		\[
+			y_{i-1}^*(x_{i-1}+\Delta x) = y_{i-1} + {y_{i-1}^*}'\Delta x + \eta_i(\Delta x)
+		\]
+		\[
+			=y_{i-1} + f(x_{i-1},y_{i-1})\Delta x + \eta_i(\Delta x)
+		\]
+		where $\eta_i(\Delta x)/\Delta x\to 0$ as $\Delta x\to 0$. Thus,
+		\[
+			d_i = \eta_i(\Delta x).
+		\]
+
+		Now, we'll bound the total error at the $i$th step.
+		\[
+			e_i = y^*(x_{i}) - y_{i} 
+		\]\[=
+			\underbrace{y^*(x_{i-1}) + f(x_{i-1}, y^*(x_{i-1}))\Delta x + 
+			\eta^*_{i-1}(\Delta x)}_{\text{exact expantion of $y^*$}} \quad-\quad \underbrace{(y_{i-1} + f(x_{i-1}, y_{i-1})\Delta x)}_{y_i},
+		\]
+		where $\eta_{i-1}^*(\Delta x)$ is again an error term that goes to zero as $\Delta x\to 0$.
+
+		Collecting terms, we now see
+		\[
+			e_i = y^*(x_{i-1})-y_{i-1} + \Big(f(x_{i-1}, y^*(x_{i-1})) - f(x_{i-1}, y_{i-1}) \Big)\Delta x + \eta^*_{i-1}(\Delta x)
+		\]\[
+			=e_{i-1} + \Big(f(x_{i-1}, y^*(x_{i-1})) - f(x_{i-1}, y_{i-1}) \Big)\Delta x + \eta^*_{i-1}(\Delta x).
+		\]
+		However, we supposed $\|\nabla f\| \leq M$, so 
+		\[
+			\big|f(x_{i-1}, y^*(x_{i-1})) - f(x_{i-1}, y_{i-1})\big| \leq M|y^*(x_{i-1}) -  y_{i-1}|
+			= M|e_{i-1}|.
+		\]
+		Putting this all together, we see
+		\[
+			|e_i| \leq |e_{i-1}| + M|e_{i-1}|\Delta x + |\eta^*_{i-1}(\Delta x)|
+			= (1+M\Delta x)|e_{i-1}| + |\eta^*_{i-1}(\Delta x)|.
+		\]
+		Let $d = \max\{|\eta_1|,|\eta_2|,\ldots,|\eta_1^*|,|\eta_2^*|,\ldots\}$.  We now have the recursive formula
+		\[
+			|e_i| \leq  (1+M\Delta x)|e_{i-1}| + d
+		\]
+		\[
+			\leq (1+M\Delta x)((1+M\Delta x)|e_{i-2}| + d) + d = (1+M\Delta x)^2|e_{i-2}| + (1+(1+M\Delta x))d
+		\]
+		\[
+			\leq (1+M\Delta x)^i|e_{0}| + \sum_{k=0}^{i-1} (1+M\Delta x)^k d.
+		\]
+		Since $e_0=0$ by construction, we know
+		\[
+			|e_i| \leq \sum_{k=0}^{i-1} (1+M\Delta x)^k d  = \frac{(1+M\Delta x)^i - 1}{M\Delta x} d.
+		\]
+		Now since $1+t \leq e^t$, we may replace $1+M\Delta x$ by $e^{M\Delta x}$ to finally get
+		\[
+			|e_i| \leq \frac{e^{iM\Delta x}-1}{M}\cdot \frac{d}{\Delta x}.
+		\]
+		Sine we are approximating in the interval $[x_0,x_0+T]$, we know $i\Delta x\leq T$, and so
+		\[
+			|e_i| \leq \frac{e^{MT}-1}{M}\cdot \frac{d}{\Delta x},
+		\]
+		and so $e_i$ is bounded by a constant times $d/\Delta x$.  Since $d$ was the maximum of errors
+		from first order approximations whose derivatives were uniformly bounded, we know $d/\Delta x\to 0$
+		as $\Delta x\to 0$.  However, we assumed something even stronger.  We assumed that
+		$\nabla f$ existed and so ${y^*}''$ and ${y^*_i}''$ exist.  Thus, we actually have $d/(\Delta x^2)\to k$,
+		which means the error in our approximation decreases \emph{linearly} with the size of $\Delta x$.
+		
+
+
+	\end{proof}
+
+\end{document}
