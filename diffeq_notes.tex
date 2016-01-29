@@ -397,9 +397,127 @@ Creative Commons By-Attribution Share-Alike\, \makebox(30,5){\includegraphics[he
 		as $\Delta x\to 0$.  However, we assumed something even stronger.  We assumed that
 		$\nabla f$ existed and so ${y^*}''$ and ${y^*_i}''$ exist.  Thus, we actually have $d/(\Delta x^2)\to k$,
 		which means the error in our approximation decreases \emph{linearly} with the size of $\Delta x$.
-		
-
-
 	\end{proof}
+
+\section*{Linear ODE's with Constant Coefficients}
+
+	All solutions to the differential equation $y'-ky=0$ are of the form $Ae^{kt}$.  And since 
+	$e^{kt}$ ``stays the same form'' when differentiated, it's a good candidate for guessing
+	solutions to differential equations.
+
+	Consider the second-order differential equation
+	\[
+		y'' -4y=0.
+	\]
+	If we guess $f(t)=e^{kt}$ as a solution we see,
+	\[
+		k^2e^{kt}-4e^{kt} =(k^2-4)e^{kt}=0.
+	\]
+	We know $e^{kt}\neq 0$, this equation can only hold true if $k^2-4=0$ and so $k=\pm 2$ provides solutions: $f(t)=e^{2t}$
+	and $f(t)=e^{-2t}$.  However, these aren't all the solutions.  We can multiply either of these solutions by a constant and
+	we get additional solutions of the form $Ae^{2t}$ and $Be^{-2t}$.
+
+	Have we found all of the solutions?  We can try to answer this question
+	by seeing if we can solve a random initial value problem.  Let's use the initial conditions
+	\[
+		y(0)=1\qquad\text{and}\qquad y'(0)=1.
+	\]
+	(Since this is a second order ODE, we can specify both $y$ and $y'$ for initial conditions.)
+
+	Testing $y(t)=Ae^{2t}$, we see that if $A=1$ then $y(0)=1$.  But then $y'(0)=2$, which isn't what
+	we want.  Testing $y(t)=Be^{-2t}$, again we see if $B=1$, $y(0)=1$, but now $y'(0)=-2$, which isn't
+	what we want either!  Is this initial value problem unsolvable, or are there other solutions lurking?
+
+	What if we tried something random like $f(t)=e^{2t}+e^{-2t}$.  Then, $f''-4f=0$. Son of a gun!  
+	We've found a missing solution.
+
+	We can check that $f(t)=Ae^{2t}+Be^{-2t}$ is a solution to the differential equation as well,
+	for any choice of $A$ and $B$.
+
+	Now testing, $f(0)=A+B=1$ and $f'(0)=2A-2B=1$ has solutions of $A=3/4$ and $B=1/4$.  Whew, the
+	initial value problem had a solution after all!
+
+	What's really going on here?
+
+	\begin{definition}[Linear]
+		A function $T$ is called \emph{linear} if $T(\alpha a+\beta b)=
+		\alpha T(a)+\beta T(b)$ for scalars $\alpha, \beta$.  Here, $a$ and $b$
+		need to be objects that can be added and scaled.
+	\end{definition}
+
+	The definition of linear is very general.  We only need that $a,b$ are objects
+	that can be added and scaled and that $\alpha,\beta$ are scalars.
+
+	Are we already familiar with some linear functions?  You betcha!  Let 
+	$\vec n\in\R^3$ and consider
+	$T:\R^3\to \R$ defined by $T(\vec v) = \vec n\cdot \vec v$.  We now have
+	\[
+		T(\alpha \vec v+\beta \vec w)  = \vec n\cdot (\alpha \vec v+\beta \vec w)
+		=\alpha\vec n\cdot \vec v + \beta\vec n\cdot \vec v = \alpha T(\vec v)+\beta T(\vec w).
+	\]
+	So, $T$ is linear!  This function $T$ looks very familiar---eerily like normal
+	form of a plane.  Normal form of a plane is
+	\[
+		\vec n\cdot \vec x=k,
+	\]
+	and normal form of a plane through the origin is
+	\[
+		\vec n\cdot \vec x = 0.
+	\]
+	Here, both equations look like ``linear function($\vec x$) = constant.''
+
+
+	Now consider the function $D:\{\text{functions}\}\to\{\text{functions}\}$ defined by
+	\[
+		D(f) = \frac{\d f}{\d x}.
+	\]
+	Is $D$ linear?  Well, functions can definitely be scaled and added to each other, so they
+	qualify as objects that could be fed into a linear function.  Also, if $f,g$ are functions
+	and $\alpha,\beta\in\R$,
+	then
+	\[
+		D(\alpha f+\beta g) = \frac{\d (\alpha f)}{\d x}+\frac{\d (\beta g)}{\d x}
+		=\alpha\frac{\d f}{\d x}+\beta \frac{\d g}{\d x} = \alpha D(f)+\beta D(g).
+	\]
+	So $D$ is linear!
+
+	Consider the differential equation $y''-2y'-y=0$.  If we let
+	\[
+		F(h)= \frac{\d^2 h}{\d x^2} - 2\frac{\d h}{\d x}-h,
+	\]
+	we can again check that $F$ is linear, and our differential equation can be rephrased
+	as $F(y)=0$.  Again, a linear function equals a constant.
+
+	Now suppose that $y$ and $y^*$ are both solutions to $F(h)=0$.  By linearity we see
+	\[
+		F(Ay+By^*) = AF(y)+BF(y^*) = 0+0=0,
+	\]
+	so $Ay+By^*$ is again a solution to the differential equation.  So, just like
+	the sum of any two direction vectors for a plane was a direction vector, so
+	is the linear combination of any two solutions to a homogeneous linear 
+	differential equation.
+
+	What about a non-homogeneous linear ODE?  Consider $y''-2y'-y=t$.  This is equivalently
+	represented as $F(y)=t$.  This looks similar to a plane that doesn't pass through the origin.
+
+	Just by guessing a polynomial solution, we can compute $F(at+b) = 2a-(at+b)=t$ when $a=-1$ and $b=2$.
+	Therefore $y(t)=-t+2$ is a solution.  If $f$ were a solution to the homogeneous ODE $F(f)=0$,
+	then $y+Af$ would be a solution to the original ODE by linearity.  Computing,
+	\[
+		F(y+Af) = F(y)+AF(f) = t+A0 = t.
+	\]
+	The set of all solutions to $F(y)=t$ now takes a form very similar to vector form of 
+	a plane.  Namely, $y+Af+Bg+\cdots$ where $y$ is a particular solution and $f,g,\ldots$ are
+	solutions to the corresponding homogeneous system.
+
+	Can we prove that every solution to $F(y)=t$ is of the form a particular solution $+$
+	a solution corresponding solution to the homogeneous system?
+
+	\begin{theorem}
+		x
+	\end{theorem}
+
+
+
 
 \end{document}
